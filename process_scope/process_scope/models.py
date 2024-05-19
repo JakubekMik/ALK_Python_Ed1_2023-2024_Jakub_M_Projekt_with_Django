@@ -20,34 +20,24 @@ class ProcessValue(models.Model):
     value = models.CharField(max_length=100)
 
     def calculate_harmonization(self):
-        total_rows = ProcessValue.objects.filter(process_taxonomy=self.process_taxonomy, country=self.country).exclude(
-            value="N/A").count()
-        count_different_values = ProcessValue.objects.filter(process_taxonomy=self.process_taxonomy,
-                                                             country=self.country).exclude(
-            value__in=["No", "N/A"]).count()
+        total_rows = ProcessValue.objects.filter(country=self.country).values('process_taxonomy__task_level6').exclude(value__in=["No", "N/A"]).distinct().count()
 
-
-        # Calculate harmonization percentage
-        #if total_rows > 0:
-            #percentage = round((count_different_values / total_rows) * 100, 2)
-        #    percentage = ProcessValue.objects.filter(process_taxonomy__standard_local='Standard', value='Yes').values('process_taxonomy__process_level3').distinct().count()
-
-        #else:
-        #    percentage = 0
-
-        percentage = ProcessValue.objects.filter(value='Yes').values('process_taxonomy__task_level6').distinct().count()
+        if  total_rows > 0:
+            percentage = round((ProcessValue.objects.filter(value='Yes',country=self.country).values('process_taxonomy__task_level6').distinct().count()/total_rows)
+                              *100,2)
+        else:
+            percentage= 0
 
         return percentage
 
     def process_comp(self):
-        total_process_level3 = ProcessValue.objects.filter(process_taxonomy__standard_local='Standard').values('process_taxonomy__process_level3').distinct().count()
-        count_process_level3_with_yes = ProcessValue.objects.filter(process_taxonomy__standard_local='Standard', value='Yes').values('process_taxonomy__process_level3').distinct().count()
+        total_process_level3 = ProcessValue.objects.filter(process_taxonomy__standard_local='Standard',country=self.country).values('process_taxonomy__process_level3').distinct().count()
+        count_process_level3_with_yes = ProcessValue.objects.filter(process_taxonomy__standard_local='Standard', value='Yes',country=self.country).values('process_taxonomy__process_level3').distinct().count()
 
         if total_process_level3 > 0:
             percentage = round((count_process_level3_with_yes / total_process_level3) * 100, 2)
         else:
             percentage = 0
-
         return percentage
 
     def save(self, *args, **kwargs):

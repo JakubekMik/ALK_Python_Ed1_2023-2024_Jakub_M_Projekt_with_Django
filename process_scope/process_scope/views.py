@@ -42,14 +42,10 @@ def bar_chart_with_colors(x, y, TextX=None, TextY=None, Title=None, highlight_in
     plt.title(Title)
     plt.xticks(rotation=45, ha="right")
     plt.tight_layout()
-
-    # Save the plot to a BytesIO object
     buffer = io.BytesIO()
     plt.savefig(buffer, format='png')
     buffer.seek(0)
     plt.close()
-
-    # Encode the image to base64 string
     image_png = buffer.getvalue()
     buffer.close()
     image_base64 = base64.b64encode(image_png)

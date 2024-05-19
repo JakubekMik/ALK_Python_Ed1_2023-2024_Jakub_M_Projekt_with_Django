@@ -12,10 +12,7 @@ def create_or_update_process_values_cl(sender, instance, created, **kwargs):
 @receiver(post_save, sender=ProcessTaxonomy)
 def create_process_values_pt(sender, instance, created, **kwargs):
     if created:
-        # Get all country instances
         countries = CountryList.objects.all()
-
-        # Create ProcessValue instances for each country and the new process taxonomy
         for country in countries:
             if instance.standard_local == 'Standard':
                 value = 'No'
@@ -28,10 +25,8 @@ def create_process_values_pt(sender, instance, created, **kwargs):
 
 
 def create_process_values(country):
-    # Get all process taxonomies
     process_taxonomies = ProcessTaxonomy.objects.all()
 
-    # Create ProcessValue instances for each process taxonomy and the new country
     for process_taxonomy in process_taxonomies:
         if process_taxonomy.standard_local == 'Standard':
             value = 'No'
@@ -45,10 +40,7 @@ def create_process_values(country):
             ProcessValue.objects.create(process_taxonomy=process_taxonomy, country=country, value=value)
 
 def update_process_values(country):
-    # Get all process taxonomies
     process_taxonomies = ProcessTaxonomy.objects.all()
-
-    # Update ProcessValue instances for the updated country
     for process_taxonomy in process_taxonomies:
         try:
             process_value = ProcessValue.objects.get(process_taxonomy=process_taxonomy, country=country)
@@ -66,5 +58,4 @@ def update_process_values(country):
                 process_value.value = ''
             process_value.save()
         except ProcessValue.DoesNotExist:
-            # Create ProcessValue if it doesn't exist
             create_process_values(country)

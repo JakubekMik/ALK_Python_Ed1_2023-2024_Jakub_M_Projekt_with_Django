@@ -29,5 +29,5 @@ class ProcessValueAdmin(admin.ModelAdmin):
         return f"{obj.process_taxonomy.category_level1} > {obj.process_taxonomy.process_group_level2} > {obj.process_taxonomy.process_level3} > {obj.process_taxonomy.subprocess_level4} > {obj.process_taxonomy.activity_level5} > {obj.process_taxonomy.task_level6} > {obj.process_taxonomy.standard_local}"
 
     display_country.short_description = 'Country'
-    display_process_taxonomy.short_description = 'Process Taxonomy
+    display_process_taxonomy.short_description = 'Process Taxonomy'
 

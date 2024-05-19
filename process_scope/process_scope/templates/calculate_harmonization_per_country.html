@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>calculate_harmonization Percentage per Country</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Process Comp Percentage per Country</h2>
+
+<form method="get" action="{% url 'calculate_harmonization_per_country' %}">
+    <label for="country">Select a Country to Highlight:</label>
+    <select name="country" id="country" onchange="this.form.submit()">
+        <option value="">--Select Country--</option>
+        {% for country in countries %}
+        <option value="{{ country.country_description }}" {% if country.country_description == selected_country %}selected{% endif %}>
+            {{ country.country_description }}
+        </option>
+        {% endfor %}
+    </select>
+</form>
+
+<img src="data:image/png;base64,{{ chart_base64 }}" alt="Process Comp Percentage per Country Chart" />
+
+<table>
+  <thead>
+    <tr>
+      <th>Country</th>
+      <th>Process Comp Percentage</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for data in calculate_harmonization_data %}
+    <tr>
+      <td>{{ data.country }}</td>
+      <td>{{ data.calculate_harmonization_percentage }}%</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+</body>
+</html>

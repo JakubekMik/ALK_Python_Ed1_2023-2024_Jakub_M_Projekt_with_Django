@@ -21,7 +21,7 @@ from .views import process_comp_per_country,index, calculate_harmonization_per_c
 urlpatterns = [
     path('', index, name='index'),
     path('admin/', admin.site.urls),
-    path('process_comp_per_country/', process_comp_per_country, name='process_comp_per_country'),
-    path('calculate_harmonization_per_country/', calculate_harmonization_per_country, name='calculate_harmonization_per_country'),
+    path('proces/', process_comp_per_country, name='process_comp_per_country'),
+    path('har/', calculate_harmonization_per_country, name='calculate_harmonization_per_country'),
 
 ]

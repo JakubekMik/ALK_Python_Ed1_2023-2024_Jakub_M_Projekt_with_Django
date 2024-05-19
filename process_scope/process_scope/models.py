@@ -7,20 +7,14 @@ class ProcessTaxonomy(models.Model):
     subprocess_level4 = models.CharField(max_length=100)
     activity_level5 = models.CharField(max_length=100)
     task_level6 = models.CharField(max_length=100)
-    standard_local = models.CharField(max_length=100,choices=(('Standard', 'Standard'), ('Local', 'Local')) ) # Can be 'Standard' or 'Local'
-
-
+    standard_local = models.CharField(max_length=100,choices=(('Standard', 'Standard'), ('Local', 'Local')) )
 class CountryList(models.Model):
     country_description = models.CharField(max_length=100)
     cluster = models.CharField(max_length=100)
     region = models.CharField(max_length=100)
-
 class ProcessValue(models.Model):
     VALUE_CHOICES_STANDARD = [('Yes', 'Yes'),('No', 'No')]
-
     VALUE_CHOICES_LOCAL = [('A', 'A'),('B', 'B'),('C', 'C'),('N/A', 'N/A')]
-
-
     process_taxonomy = models.ForeignKey(ProcessTaxonomy, on_delete=models.CASCADE)
     country = models.ForeignKey(CountryList, on_delete=models.CASCADE)
     value = models.CharField(max_length=100)

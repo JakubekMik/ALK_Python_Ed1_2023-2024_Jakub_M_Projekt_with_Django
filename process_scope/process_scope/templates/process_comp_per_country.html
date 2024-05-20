@@ -3,11 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Process Comp Percentage per Country</title>
+    <title>ProcessValue Data</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            background-color: #00677F;
+            overflow: hidden;
+        }
+        .navbar a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 20px;
+            text-decoration: none;
+        }
+        .navbar a:hover {
+            background-color: #004f5f;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 20px;
         }
         th, td {
             border: 1px solid black;
@@ -17,9 +36,26 @@
         th {
             background-color: #f2f2f2;
         }
+        .header-image {
+            width: 100%;
+            height: auto;
+        }
     </style>
 </head>
 <body>
+
+<!-- Header Image -->
+{% load static %}
+<img src="{% static 'images/header.jpg' %}" alt="Header Image" class="header-image">
+
+<!-- Navigation Bar -->
+<div class="navbar">
+    <a href="{% url 'index' %}">Home Page</a>
+    <a href="{% url 'calculate_harmonization_per_country' %}">Harmonization Page</a>
+    <a href="{% url 'process_comp_per_country' %}">Scope Page</a>
+    <a href="{% url 'process_comp_per_country' %}">Region Page</a>
+    <a href="{% url 'proces_page' %}">Process Page</a>
+</div>
 
 <h2>Process Comp Percentage per Country</h2>
 

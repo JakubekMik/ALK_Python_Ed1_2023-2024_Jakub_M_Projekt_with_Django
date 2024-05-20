@@ -9,6 +9,12 @@ def index(request):
 
     return render(request, 'index.html', {'process_values': process_values})
 
+def proces_page(request):
+    process_values = ProcessValue.objects.all()
+
+    return render(request, 'proces_page.html', {'process_values': process_values})
+
+
 
 def test(request):
     countries = CountryList.objects.all()

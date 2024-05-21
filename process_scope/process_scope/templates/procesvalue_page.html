@@ -16,20 +16,22 @@
       <th>Activity Level 5</th>
       <th>Task Level 6</th>
       <th>Standard/Local</th>
-
+      <th>Country</th>
+      <th>Value</th>
     </tr>
   </thead>
   <tbody>
-    {% for process_tax_value in process_tax_values %}
+    {% for process_value in process_values %}
     <tr>
-      <td>{{ process_tax_value.category_level1 }}</td>
-      <td>{{ process_tax_value.process_group_level2 }}</td>
-      <td>{{ process_tax_value.process_level3 }}</td>
-      <td>{{ process_tax_value.subprocess_level4 }}</td>
-      <td>{{ process_tax_value.activity_level5 }}</td>
-      <td>{{ process_tax_value.task_level6 }}</td>
-      <td>{{ process_tax_value.standard_local }}</td>
-
+      <td>{{ process_value.process_taxonomy.category_level1 }}</td>
+      <td>{{ process_value.process_taxonomy.process_group_level2 }}</td>
+      <td>{{ process_value.process_taxonomy.process_level3 }}</td>
+      <td>{{ process_value.process_taxonomy.subprocess_level4 }}</td>
+      <td>{{ process_value.process_taxonomy.activity_level5 }}</td>
+      <td>{{ process_value.process_taxonomy.task_level6 }}</td>
+      <td>{{ process_value.process_taxonomy.standard_local }}</td>
+      <td>{{ process_value.country.country_description }}</td>
+      <td>{{ process_value.value }}</td>
     </tr>
     {% endfor %}
   </tbody>
@@ -40,7 +42,7 @@
 <script>
 // Example data
 var countries = ["Country A", "Country B", "Country C"];
-var harmonizationPercentages = [60, 70, 80]; // Example values
+var harmonizationPercentages = [60, 70, 80];a // Example values
 
 // Create the bar chart
 var barChart = tfvis.render.barChart(

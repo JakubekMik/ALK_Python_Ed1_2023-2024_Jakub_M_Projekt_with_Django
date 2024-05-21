@@ -1,112 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ProcessValue Data</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        .navbar {
-            background-color: #00677F;
-            overflow: hidden;
-        }
-        .navbar a {
-            float: left;
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 20px;
-            text-decoration: none;
-        }
-        .navbar a:hover {
-            background-color: #004f5f;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .header-image {
-            width: 100%;
-            height: auto;
-        }
-    </style>
-</head>
-<body>
+{% extends 'base.html' %}
 
-<!-- Header Image -->
-{% load static %}
-<img src="{% static 'images/header.jpg' %}" alt="Header Image" class="header-image">
+{% block title %}Process Level 3 Percentage{% endblock %}
 
-<!-- Navigation Bar -->
-<div class="navbar">
-    <a href="{% url 'index' %}">Home Page</a>
-    <a href="{% url 'calculate_harmonization_per_country' %}">Harmonization Page</a>
-    <a href="{% url 'process_comp_per_country' %}">Scope Page</a>
-    <a href="{% url 'process_comp_per_country' %}">Region Page</a>
-    <a href="{% url 'proces_page' %}">Process Page</a>
-</div>
+{% block content %}
 
-<h2>ProcessValue Data</h2>
 
-<table>
-  <thead>
-    <tr>
-      <th>Category Level 1</th>
-      <th>Process Group Level 2</th>
-      <th>Process Level 3</th>
-      <th>Subprocess Level 4</th>
-      <th>Activity Level 5</th>
-      <th>Task Level 6</th>
-      <th>Standard/Local</th>
-      <th>Country</th>
-      <th>Value</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for process_value in process_values %}
-    <tr>
-      <td>{{ process_value.process_taxonomy.category_level1 }}</td>
-      <td>{{ process_value.process_taxonomy.process_group_level2 }}</td>
-      <td>{{ process_value.process_taxonomy.process_level3 }}</td>
-      <td>{{ process_value.process_taxonomy.subprocess_level4 }}</td>
-      <td>{{ process_value.process_taxonomy.activity_level5 }}</td>
-      <td>{{ process_value.process_taxonomy.task_level6 }}</td>
-      <td>{{ process_value.process_taxonomy.standard_local }}</td>
-      <td>{{ process_value.country.country_description }}</td>
-      <td>{{ process_value.value }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+<center>
+ <h1>Introduction to Process Harmonization Program</h1>
 
-<div id="bar_chart"></div>
+    <h2>Welcome to my first program created using Django !!! </h2>
+</center>
+    <p>The Process Harmonization Program is a data analysis tool that enables the processing and analysis of information related to business processes. Below you will find a description of the tasks performed by this program:</p>
 
-<script>
-// Example data
-var countries = ["Country A", "Country B", "Country C"];
-var harmonizationPercentages = [60, 70, 80]; // Example values
+    <h3>Column Separation:</h3>
+    <p>The program automatically separates the column containing country names when there is more than one country name (separated by a comma or other delimiter). This operation facilitates the analysis of data related to multiple countries.</p>
 
-// Create the bar chart
-var barChart = tfvis.render.barChart(
-    {values: harmonizationPercentages},
-    {xAxisDomain: countries, width: 800, height: 400},
-    {zoomToFit: true}
-);
+    <h3>Data Conversion from Pivot to Database:</h3>
+    <p>The program allows the conversion of data provided in pivot form to database form. It reverses this process, allowing for better analysis and storage of data in a more traditional database form.</p>
 
-// Display the bar chart
-document.getElementById('bar_chart').appendChild(barChart);
-</script>
+    <h3>Assignment of Data to Corresponding Geographic Regions:</h3>
+    <p>Data is assigned to the appropriate geographic regions, enabling data analysis from a geographical perspective. This facilitates understanding of where specific business phenomena occur.</p>
 
-</body>
-</html>
+    <h3>Calculation of Process Scope Completion:</h3>
+    <p>The program calculates whether for a given process level (level 4) there is a task performed at level 6 (value "Yes"). The process is considered adopted if such a task exists. Otherwise, if such a task is missing, the process is considered unadopted, with the possibility of "Local Exception" being skipped.</p>
+
+    <h3>Calculation of Process Harmonization:</h3>
+    <p>The program calculates the process harmonization index, which is the ratio of the number of Standard Tasks performed (value Yes) to the total number of Standard Tasks in the process, taking into account any Local Exceptions. This index helps understand the degree of standardization and consistency in the processes being performed.</p>
+
+    <h3>Graphical Presentation of Results:</h3>
+    <p>The program presents the analysis results graphically, making them easier to understand and interpret. Users have the option to limit the results to a specific region or process, enabling a more detailed analysis.</p>
+
+    <h3>Graphical ilustation of program</h3>
+    <img src="https://github.com/JakubekMik/ALK_Python_Ed1_2023-2024_Jakub_M_Projekt/blob/main/picture/jakub_alk_main.jpg" alt="Prezentacja">
+
+    <h3>Graphical ilustation of program</h3>
+    <img src="https://github.com/JakubekMik/ALK_Python_Ed1_2023-2024_Jakub_M_Projekt/blob/main/picture/jakub_alk_psc.jpg" alt="Prezentacja">
+
+    <h2>Running Instructions</h2>
+
+    <pre><code>streamlit run ".\program.py"</code></pre>
+
+    <h2>Requirements</h2>
+    <p>To run the program, make sure you have the required Python packages installed. You can install them using the following command:</p>
+
+    <pre><code>pip install -r requirements.txt</code></pre>
+
+{% endblock %}

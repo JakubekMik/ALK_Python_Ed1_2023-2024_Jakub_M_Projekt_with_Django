@@ -3,12 +3,12 @@
 {% block title %}Process Level 3 Percentage{% endblock %}
 
 {% block content %}
+
 <center>
- <h1>Process Comp Percentage per Country</h1>
- <h2>Welcome to my first program created using Django !!!</h2>
+    <h1>Process Level 3 Percentage</h1>
 </center>
 
-<form method="get" action="{% url 'process_comp_per_country' %}">
+<form method="get" action="{% url 'process_level3_percentage' %}">
     <label for="region">Select a Region:</label>
     <select name="region" id="region">
         <option value="">--Select Region--</option>
@@ -42,8 +42,6 @@
     <button type="submit">Submit</button>
 </form>
 
-<img src="data:image/png;base64,{{ chart_base64 }}" alt="Process Comp Percentage per Country Chart" />
-
 <h2>By Country</h2>
 <table>
   <thead>
@@ -51,57 +49,19 @@
       <th>Country</th>
       <th>Region</th>
       <th>Cluster</th>
-      <th>Process Comp Percentage</th>
+      <th>Process Level 3 Percentage</th>
     </tr>
   </thead>
   <tbody>
-    {% for data in process_comp_data %}
+    {% for data in process_data %}
     <tr>
       <td>{{ data.country }}</td>
       <td>{{ data.region }}</td>
       <td>{{ data.cluster }}</td>
-      <td>{{ data.process_comp_percentage }}%</td>
+      <td>{{ data.percentage }}%</td>
     </tr>
     {% endfor %}
   </tbody>
-</table>
-
-<h2>By Region</h2>
-<table border="1">
-    <thead>
-        <tr>
-            <th>Region</th>
-            <th>Harmonization Percentage</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for result in region_results %}
-        <tr>
-            <td>{{ result.region }}</td>
-            <td>{{ result.percentage }}%</td>
-        </tr>
-       {% endfor %}
-    </tbody>
-</table>
-
-<h2>By Cluster</h2>
-<table border="1">
-    <thead>
-        <tr>
-            <th>Cluster</th>
-            <th>Region</th>
-            <th>Harmonization Percentage</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for result in cluster_results %}
-        <tr>
-            <td>{{ result.cluster }}</td>
-            <td>{{ result.region }}</td>
-            <td>{{ result.percentage }}%</td>
-        </tr>
-        {% endfor %}
-    </tbody>
 </table>
 
 {% endblock %}

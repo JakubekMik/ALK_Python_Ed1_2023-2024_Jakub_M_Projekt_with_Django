@@ -1,82 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ProcessValue Data</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        .navbar {
-            background-color: #00677F;
-            overflow: hidden;
-        }
-        .navbar a {
-            float: left;
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 20px;
-            text-decoration: none;
-        }
-        .navbar a:hover {
-            background-color: #004f5f;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .header-image {
-            width: 100%;
-            height: auto;
-        }
-    </style>
-</head>
-<body>
+{% extends 'base.html' %}
 
-<!-- Header Image -->
-{% load static %}
-<img src="{% static 'images/header.jpg' %}" alt="Header Image" class="header-image">
+{% block title %}Process Level 3 Percentage{% endblock %}
 
-<!-- Navigation Bar -->
-<div class="navbar">
-    <a href="{% url 'index' %}">Home Page</a>
-    <a href="{% url 'calculate_harmonization_per_country' %}">Harmonization Page</a>
-    <a href="{% url 'process_comp_per_country' %}">Scope Page</a>
-    <a href="{% url 'process_comp_per_country' %}">Region Page</a>
-    <a href="{% url 'proces_page' %}">Process Page</a>
-</div>
+{% block content %}
 
-<h2>Process Comp Percentage per Country</h2>
+
+<center>
+ <h1>Process Comp Percentage per Country</h1>
+ <h2>Welcome to my first program created using Django !!!</h2>
+</center>
 
 <form method="get" action="{% url 'calculate_harmonization_per_country' %}">
+    <label for="region">Select a Region:</label>
+    <select name="region" id="region">
+        <option value="">--Select Region--</option>
+        {% for region in regions %}
+        <option value="{{ region }}" {% if region == selected_region %}selected{% endif %}>{{ region }}</option>
+        {% endfor %}
+    </select>
+
+    <label for="cluster">Select a Cluster:</label>
+    <select name="cluster" id="cluster" {% if not selected_region %}disabled{% endif %}>
+        <option value="">--Select Cluster--</option>
+        {% if selected_region %}
+        {% for cluster in clusters %}
+        <option value="{{ cluster }}" {% if cluster == selected_cluster %}selected{% endif %}>{{ cluster }}</option>
+        {% endfor %}
+        {% endif %}
+    </select>
+
     <label for="country">Select a Country to Highlight:</label>
-    <select name="country" id="country" onchange="this.form.submit()">
+    <select name="country" id="country" {% if not selected_cluster %}disabled{% endif %}>
         <option value="">--Select Country--</option>
+        {% if selected_cluster %}
         {% for country in countries %}
         <option value="{{ country.country_description }}" {% if country.country_description == selected_country %}selected{% endif %}>
             {{ country.country_description }}
         </option>
         {% endfor %}
+        {% endif %}
     </select>
+
+    <button type="submit">Submit</button>
 </form>
 
 <img src="data:image/png;base64,{{ chart_base64 }}" alt="Process Comp Percentage per Country Chart" />
 
+<h2>By Country</h2>
 <table>
   <thead>
     <tr>
       <th>Country</th>
+      <th>Region</th>
+      <th>Cluster</th>
       <th>Process Comp Percentage</th>
     </tr>
   </thead>
@@ -84,11 +60,50 @@
     {% for data in calculate_harmonization_data %}
     <tr>
       <td>{{ data.country }}</td>
+      <td>{{ data.region }}</td>
+      <td>{{ data.cluster }}</td>
       <td>{{ data.calculate_harmonization_percentage }}%</td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
 
-</body>
-</html>
+<h2>By Region</h2>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Region</th>
+            <th>Harmonization Percentage</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for result in region_results %}
+        <tr>
+            <td>{{ result.region }}</td>
+            <td>{{ result.percentage }}%</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>By Cluster</h2>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Cluster</th>
+            <th>Region</th>
+            <th>Harmonization Percentage</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for result in cluster_results %}
+        <tr>
+            <td>{{ result.cluster }}</td>
+            <td>{{ result.region }}</td>
+            <td>{{ result.percentage }}%</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

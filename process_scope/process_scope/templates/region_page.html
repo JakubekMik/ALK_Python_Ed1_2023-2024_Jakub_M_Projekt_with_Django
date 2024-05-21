@@ -9,26 +9,18 @@
 <table>
   <thead>
     <tr>
-      <th>Category Level 1</th>
-      <th>Process Group Level 2</th>
-      <th>Process Level 3</th>
-      <th>Subprocess Level 4</th>
-      <th>Activity Level 5</th>
-      <th>Task Level 6</th>
-      <th>Standard/Local</th>
+      <th>Region</th>
+      <th>Cluster</th>
+      <th>Country</th>
 
     </tr>
   </thead>
   <tbody>
-    {% for process_tax_value in process_tax_values %}
+    {% for region_value in region_values %}
     <tr>
-      <td>{{ process_tax_value.category_level1 }}</td>
-      <td>{{ process_tax_value.process_group_level2 }}</td>
-      <td>{{ process_tax_value.process_level3 }}</td>
-      <td>{{ process_tax_value.subprocess_level4 }}</td>
-      <td>{{ process_tax_value.activity_level5 }}</td>
-      <td>{{ process_tax_value.task_level6 }}</td>
-      <td>{{ process_tax_value.standard_local }}</td>
+      <td>{{ region_value.region }}</td>
+      <td>{{ region_value.cluster }}</td>
+      <td>{{ region_value.country_description }}</td>
 
     </tr>
     {% endfor %}

@@ -16,13 +16,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from .views import process_comp_per_country,index, calculate_harmonization_per_country, proces_page
+from .views import process_comp_per_country,index, calculate_harmonization_per_country, proces_page, region_page, procesvalue_page, process_level3_percentage
 
 urlpatterns = [
     path('', index, name='index'),
     path('admin/', admin.site.urls),
-    path('proces/', process_comp_per_country, name='process_comp_per_country'),
+    path('scope/', process_comp_per_country, name='process_comp_per_country'),
     path('har/', calculate_harmonization_per_country, name='calculate_harmonization_per_country'),
-    path('value/', proces_page, name='proces_page'),
+    path('value/', procesvalue_page, name='procesvalue_page'),
+    path('proces/', proces_page, name='proces_page'),
+    path('region/', region_page, name='region_page'),
+    path('test/', process_level3_percentage, name='process_level3_percentage'),
 
 ]

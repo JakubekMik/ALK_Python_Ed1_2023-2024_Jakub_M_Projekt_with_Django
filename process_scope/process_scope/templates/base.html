@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Title{% endblock %}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            background-color: #00677F;
+            overflow: hidden;
+        }
+        .navbar a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 20px;
+            text-decoration: none;
+        }
+        .navbar a:hover {
+            background-color: #004f5f;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border: 1px solid #ddd; /* Add border to table */
+        }
+        th, td {
+            border: 1px solid #ddd; /* Add border to table cells */
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #00677F;
+            color: #f2f2f2;
+            text-align: left; /* Center-align table headers */
+        }
+    </style>
+
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const regions = JSON.parse('{{ regions|escapejs }}');
+            const clusters = JSON.parse('{{ clusters|escapejs }}');
+            const countries = JSON.parse('{{ countries|escapejs }}');
+
+            const regionSelect = document.getElementById('region');
+            const clusterSelect = document.getElementById('cluster');
+            const countrySelect = document.getElementById('country');
+
+            regionSelect.addEventListener('change', function() {
+                const selectedRegion = this.value;
+                filterClusters(selectedRegion);
+                filterCountries(selectedRegion, clusterSelect.value);
+            });
+
+            clusterSelect.addEventListener('change', function() {
+                const selectedCluster = this.value;
+                filterCountries(regionSelect.value, selectedCluster);
+            });
+
+            function filterClusters(region) {
+                clusterSelect.innerHTML = '<option value="">--Select Cluster--</option>';
+                const filteredClusters = clusters.filter(cluster => cluster.region === region);
+                filteredClusters.forEach(cluster => {
+                    const option = document.createElement('option');
+                    option.value = cluster;
+                    option.textContent = cluster;
+                    clusterSelect.appendChild(option);
+                });
+                clusterSelect.disabled = !filteredClusters.length;
+            }
+
+            function filterCountries(region, cluster) {
+                countrySelect.innerHTML = '<option value="">--Select Country--</option>';
+                const filteredCountries = countries.filter(country =>
+                    (!region || country.region === region) &&
+                    (!cluster || country.cluster === cluster)
+                );
+                filteredCountries.forEach(country => {
+                    const option = document.createElement('option');
+                    option.value = country.country_description;
+                    option.textContent = country.country_description;
+                    countrySelect.appendChild(option);
+                });
+                countrySelect.disabled = !filteredCountries.length;
+            }
+        });
+    </script>
+
+</head>
+<body>
+
+<!-- Header Image -->
+{% load static %}
+<img src="{% static 'images/header.jpg' %}" alt="Header Image" class="header-image">
+
+<!-- Navigation Bar -->
+<div class="navbar">
+    <a href="{% url 'index' %}">Home Page</a>
+    <a href="{% url 'calculate_harmonization_per_country' %}">Harmonization Page</a>
+    <a href="{% url 'process_comp_per_country' %}">Scope Page</a>
+    <a href="{% url 'region_page' %}">Region Page</a>
+    <a href="{% url 'proces_page' %}">Process Page</a>
+    <a href="{% url 'procesvalue_page' %}">Value Page</a>
+</div>
+
+{% block content %}
+{% endblock %}
+
+</body>
+</html>

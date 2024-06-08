@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
-{% block title %}Process Level 3 Percentage{% endblock %}
+{% block title %}Process Harmonization Percentage{% endblock %}
 
 {% block content %}
 <center>
  <h1>Process Harmonization Percentage per Country</h1>
- <h2>Welcome to my first program created using Django !!!</h2>
+ <h2>Welcome to my program created using Django!</h2>
 </center>
 
 <form method="get" action="{% url 'calculate_harmonization_per_country' %}">
@@ -38,7 +38,7 @@
     <button type="submit">Submit</button>
 </form>
 <center>
-<img src="data:image/png;base64,{{ chart_base64 }}" alt="Process Comp Percentage per Country Chart" />
+<img src="data:image/png;base64,{{ chart_base64 }}" alt="Harmonization Percentage per Country Chart" />
 </center>
 
 <h2>By Country</h2>
@@ -48,7 +48,7 @@
       <th>Country</th>
       <th>Region</th>
       <th>Cluster</th>
-      <th>Process Comp Percentage</th>
+      <th>Harmonization Percentage</th>
     </tr>
   </thead>
   <tbody>
@@ -63,42 +63,55 @@
   </tbody>
 </table>
 
-<h2>By Region</h2>
-<table border="1">
-    <thead>
-        <tr>
-            <th>Region</th>
-            <th>Harmonization Percentage</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for result in region_results %}
-        <tr>
-            <td>{{ result.region }}</td>
-            <td>{{ result.percentage }}%</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const regions = JSON.parse('{{ regions|escapejs }}');
+        const clusters = JSON.parse('{{ clusters|escapejs }}');
+        const countries = JSON.parse('{{ countries|escapejs }}');
 
-<h2>By Cluster</h2>
-<table border="1">
-    <thead>
-        <tr>
-            <th>Cluster</th>
-            <th>Region</th>
-            <th>Harmonization Percentage</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for result in cluster_results %}
-        <tr>
-            <td>{{ result.cluster }}</td>
-            <td>{{ result.region }}</td>
-            <td>{{ result.percentage }}%</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+        const regionSelect = document.getElementById('region');
+        const clusterSelect = document.getElementById('cluster');
+        const countrySelect = document.getElementById('country');
+
+        regionSelect.addEventListener('change', function() {
+            const selectedRegion = this.value;
+            filterClusters(selectedRegion);
+            filterCountries(selectedRegion, clusterSelect.value);
+        });
+
+        clusterSelect.addEventListener('change', function() {
+            const selectedCluster = this.value;
+            filterCountries(regionSelect.value, selectedCluster);
+        });
+
+        function filterClusters(region) {
+            clusterSelect.innerHTML = '<option value="">--Select Cluster--</option>';
+            const filteredClusters = clusters.filter(cluster => cluster.region === region);
+            const uniqueClusters = [...new Set(filteredClusters.map(cluster => cluster.cluster))];
+            uniqueClusters.forEach(clusterName => {
+                const option = document.createElement('option');
+                option.value = clusterName;
+                option.textContent = clusterName;
+                clusterSelect.appendChild(option);
+            });
+            clusterSelect.disabled = !uniqueClusters.length;
+        }
+
+        function filterCountries(region, cluster) {
+            countrySelect.innerHTML = '<option value="">--Select Country--</option>';
+            const filteredCountries = countries.filter(country =>
+                (!region || country.region === region) &&
+                (!cluster || country.cluster === cluster)
+            );
+            filteredCountries.forEach(country => {
+                const option = document.createElement('option');
+                option.value = country.country_description;
+                option.textContent = country.country_description;
+                countrySelect.appendChild(option);
+            });
+            countrySelect.disabled = !filteredCountries.length;
+        }
+    });
+</script>
 
 {% endblock %}

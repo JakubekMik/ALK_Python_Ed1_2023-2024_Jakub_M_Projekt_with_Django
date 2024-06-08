@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Add New Process{% endblock %}
+
+{% block content %}
+
+<h2>Add New Process</h2>
+
+<form method="POST" action="{% url 'create_process' %}">
+    {% csrf_token %}
+    <label for="category_level1">Category Level 1:</label>
+    <input type="text" name="category_level1" id="category_level1">
+
+    <label for="process_group_level2">Process Group Level 2:</label>
+    <input type="text" name="process_group_level2" id="process_group_level2">
+
+    <label for="process_level3">Process Level 3:</label>
+    <input type="text" name="process_level3" id="process_level3">
+
+    <label for="subprocess_level4">Subprocess Level 4:</label>
+    <input type="text" name="subprocess_level4" id="subprocess_level4">
+
+    <label for="activity_level5">Activity Level 5:</label>
+    <input type="text" name="activity_level5" id="activity_level5">
+
+    <label for="task_level6">Task Level 6:</label>
+    <input type="text" name="task_level6" id="task_level6">
+
+    <label for="standard_local">Standard/Local:</label>
+    <select name="standard_local" id="standard_local">
+        <option value="Standard">Standard</option>
+        <option value="Local">Local</option>
+    </select>
+
+    <button type="submit">Submit</button>
+    <a href="{% url 'proces_page' %}">Cancel</a>
+</form>
+
+{% endblock %}

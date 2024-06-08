@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Add New Region{% endblock %}
+
+{% block content %}
+
+<h2>Add New Region</h2>
+
+<form method="POST" action="{% url 'create_region' %}">
+    {% csrf_token %}
+    <label for="region">Region:</label>
+    <input type="text" name="region" id="region">
+    <label for="cluster">Cluster:</label>
+    <input type="text" name="cluster" id="cluster">
+    <label for="country">Country:</label>
+    <input type="text" name="country" id="country">
+    <button type="submit">Submit</button>
+    <a href="{% url 'region_page' %}">Cancel</a>
+</form>
+
+{% endblock %}

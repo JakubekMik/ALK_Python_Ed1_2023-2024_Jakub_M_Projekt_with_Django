@@ -16,7 +16,7 @@
       <th>Activity Level 5</th>
       <th>Task Level 6</th>
       <th>Standard/Local</th>
-
+      <th>Action</th>
     </tr>
   </thead>
   <tbody>
@@ -29,28 +29,19 @@
       <td>{{ process_tax_value.activity_level5 }}</td>
       <td>{{ process_tax_value.task_level6 }}</td>
       <td>{{ process_tax_value.standard_local }}</td>
-
+      <td>
+        <a href="{% url 'edit_process' process_tax_value.id %}">Edit</a>
+      </td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
 
+<div style="text-align: center; margin-top: 20px;">
+  <a href="{% url 'add_process' %}" style="background-color: #00677F; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Add New Record</a>
+</div>
+
 <div id="bar_chart"></div>
 
-<script>
-// Example data
-var countries = ["Country A", "Country B", "Country C"];
-var harmonizationPercentages = [60, 70, 80]; // Example values
-
-// Create the bar chart
-var barChart = tfvis.render.barChart(
-    {values: harmonizationPercentages},
-    {xAxisDomain: countries, width: 800, height: 400},
-    {zoomToFit: true}
-);
-
-// Display the bar chart
-document.getElementById('bar_chart').appendChild(barChart);
-</script>
 
 {% endblock %}

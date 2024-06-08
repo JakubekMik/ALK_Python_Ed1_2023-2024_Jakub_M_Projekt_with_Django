@@ -16,7 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from .views import process_comp_per_country,index, calculate_harmonization_per_country, proces_page, region_page, procesvalue_page, process_level3_percentage
+from .views import (process_comp_per_country,index, calculate_harmonization_per_country, proces_page,
+                    region_page, procesvalue_page, process_level3_percentage,
+                    edit_process_value, update_process_value,
+                    edit_region, update_region, add_region, create_region,add_region,
+                    edit_process, update_process, add_process, create_process)
 
 urlpatterns = [
     path('', index, name='index'),
@@ -27,5 +31,17 @@ urlpatterns = [
     path('proces/', proces_page, name='proces_page'),
     path('region/', region_page, name='region_page'),
     path('process/', process_level3_percentage, name='process_level3_percentage'),
+    path('edit_process_value/<int:id>/', edit_process_value, name='edit_process_value'),
+    path('update_process_value/', update_process_value, name='update_process_value'),
+    path('edit_region/<int:id>/', edit_region, name='edit_region'),
+    path('update_region/', update_region, name='update_region'),
+    path('add_region/', add_region, name='add_region'),
+    path('create_region/', create_region, name='create_region'),
+    path('add_process/', add_process, name='add_process'),
+    path('create_process/', create_process, name='create_process'),
+    path('edit_process/<int:id>/', edit_process, name='edit_process'),
+    path('update_process/', update_process, name='update_process'),
+
 
 ]
+

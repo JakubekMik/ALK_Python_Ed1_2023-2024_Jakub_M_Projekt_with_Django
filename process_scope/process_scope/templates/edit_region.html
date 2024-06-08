@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Region{% endblock %}
+
+{% block content %}
+<center>
+<h2>Edit Region</h2>
+</center>
+
+<form method="POST" action="{% url 'update_region' %}">
+    {% csrf_token %}
+    <input type="hidden" name="region_id" value="{{ region.id }}">
+     <div style="margin-bottom: 15px;">
+        <label for="new_region">New Region:</label>
+       <input type="text" name="new_region" id="new_region" value="{{ region.region }}" style="width: 100%; padding: 8px;">
+    </div>
+    <div style="margin-bottom: 15px;">
+        <label for="new_cluster">New Cluster:</label>
+        <input type="text" name="new_cluster" id="new_cluster" value="{{ region.cluster }}" style="width: 100%; padding: 8px;">
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label for="new_country">New Country:</label>
+        <input type="text" name="new_country" id="new_country" value="{{ region.country_description }}" style="width: 100%; padding: 8px;">
+    </div>
+
+        <div style="text-align: center; margin-top: 20px;">
+        <button type="submit" style="background-color: #00677F; color: white; padding: 10px 20px; border: none; border-radius: 5px;">Submit</button>
+        <a href="{% url 'region_page' %}" style="background-color: red; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-left: 10px;">Cancel</a>
+    </div>
+
+
+</form>
+
+
+{% endblock %}

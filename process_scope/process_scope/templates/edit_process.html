@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Process{% endblock %}
+
+{% block content %}
+
+<h2>Edit Process</h2>
+
+<form method="POST" action="{% url 'update_process' %}" style="max-width: 600px; margin: 0 auto;">
+    {% csrf_token %}
+    <input type="hidden" name="process_id" value="{{ process_tax.id }}">
+
+    <div style="margin-bottom: 15px;">
+        <label for="category_level1" style="display: block; margin-bottom: 5px;">Category Level 1:</label>
+        <input type="text" name="category_level1" id="category_level1" value="{{ process_tax.category_level1 }}" style="width: 100%; padding: 8px;">
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label for="process_group_level2" style="display: block; margin-bottom: 5px;">Process Group Level 2:</label>
+        <input type="text" name="process_group_level2" id="process_group_level2" value="{{ process_tax.process_group_level2 }}" style="width: 100%; padding: 8px;">
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label for="process_level3" style="display: block; margin-bottom: 5px;">Process Level 3:</label>
+        <input type="text" name="process_level3" id="process_level3" value="{{ process_tax.process_level3 }}" style="width: 100%; padding: 8px;">
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label for="subprocess_level4" style="display: block; margin-bottom: 5px;">Subprocess Level 4:</label>
+        <input type="text" name="subprocess_level4" id="subprocess_level4" value="{{ process_tax.subprocess_level4 }}" style="width: 100%; padding: 8px;">
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label for="activity_level5" style="display: block; margin-bottom: 5px;">Activity Level 5:</label>
+        <input type="text" name="activity_level5" id="activity_level5" value="{{ process_tax.activity_level5 }}" style="width: 100%; padding: 8px;">
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label for="task_level6" style="display: block; margin-bottom: 5px;">Task Level 6:</label>
+        <input type="text" name="task_level6" id="task_level6" value="{{ process_tax.task_level6 }}" style="width: 100%; padding: 8px;">
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label for="standard_local" style="display: block; margin-bottom: 5px;">Standard/Local:</label>
+        <select name="standard_local" id="standard_local" style="width: 100%; padding: 8px;">
+            <option value="Standard" {% if process_tax.standard_local == 'Standard' %}selected{% endif %}>Standard</option>
+            <option value="Local" {% if process_tax.standard_local == 'Local' %}selected{% endif %}>Local</option>
+        </select>
+    </div>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <button type="submit" style="background-color: #00677F; color: white; padding: 10px 20px; border: none; border-radius: 5px;">Submit</button>
+        <a href="{% url 'proces_page' %}" style="background-color: red; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-left: 10px;">Cancel</a>
+    </div>
+</form>
+
+{% endblock %}

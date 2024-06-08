@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Process Value{% endblock %}
+
+{% block content %}
+
+<h2>Edit Process Value</h2>
+
+<form method="POST" action="{% url 'update_process_value' %}" style="max-width: 600px; margin: 0 auto;">
+    {% csrf_token %}
+    <input type="hidden" name="process_value_id" value="{{ process_value.id }}">
+
+    <div style="margin-bottom: 15px;">
+        <label style="font-weight: bold; display: inline-block; width: 150px;">Category Level 1:</label>
+        <span>{{ process_value.process_taxonomy.category_level1 }}</span>
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label style="font-weight: bold; display: inline-block; width: 150px;">Process Group Level 2:</label>
+        <span>{{ process_value.process_taxonomy.process_group_level2 }}</span>
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label style="font-weight: bold; display: inline-block; width: 150px;">Process Level 3:</label>
+        <span>{{ process_value.process_taxonomy.process_level3 }}</span>
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label style="font-weight: bold; display: inline-block; width: 150px;">Subprocess Level 4:</label>
+        <span>{{ process_value.process_taxonomy.subprocess_level4 }}</span>
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label style="font-weight: bold; display: inline-block; width: 150px;">Activity Level 5:</label>
+        <span>{{ process_value.process_taxonomy.activity_level5 }}</span>
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label style="font-weight: bold; display: inline-block; width: 150px;">Task Level 6:</label>
+        <span>{{ process_value.process_taxonomy.task_level6 }}</span>
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label style="font-weight: bold; display: inline-block; width: 150px;">Standard/Local:</label>
+        <span>{{ process_value.process_taxonomy.standard_local }}</span>
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label style="font-weight: bold; display: inline-block; width: 150px;">Country:</label>
+        <span>{{ process_value.country.country_description }}</span>
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label for="new_value" style="font-weight: bold; display: block; margin-bottom: 5px;">New Value:</label>
+        <select name="new_value" id="new_value" style="width: 100%; padding: 8px;">
+            {% for key, value in value_choices.items %}
+            <option value="{{ key }}" {% if key == process_value.value %}selected{% endif %}>{{ value }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <button type="submit" style="background-color: #00677F; color: white; padding: 10px 20px; border: none; border-radius: 5px;">Submit</button>
+        <a href="{% url 'procesvalue_page' %}" style="background-color: red; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-left: 10px;">Cancel</a>
+    </div>
+</form>
+
+{% endblock %}

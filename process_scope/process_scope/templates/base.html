@@ -40,58 +40,6 @@
             text-align: left; /* Center-align table headers */
         }
     </style>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const regions = JSON.parse('{{ regions|escapejs }}');
-            const clusters = JSON.parse('{{ clusters|escapejs }}');
-            const countries = JSON.parse('{{ countries|escapejs }}');
-
-            const regionSelect = document.getElementById('region');
-            const clusterSelect = document.getElementById('cluster');
-            const countrySelect = document.getElementById('country');
-
-            regionSelect.addEventListener('change', function() {
-                const selectedRegion = this.value;
-                filterClusters(selectedRegion);
-                filterCountries(selectedRegion, clusterSelect.value);
-            });
-
-            clusterSelect.addEventListener('change', function() {
-                const selectedCluster = this.value;
-                filterCountries(regionSelect.value, selectedCluster);
-            });
-
-            function filterClusters(region) {
-                clusterSelect.innerHTML = '<option value="">--Select Cluster--</option>';
-                const filteredClusters = clusters.filter(cluster => cluster.region === region);
-                const uniqueClusters = [...new Set(filteredClusters.map(cluster => cluster.cluster))];
-                uniqueClusters.forEach(clusterName => {
-                    const option = document.createElement('option');
-                    option.value = clusterName;
-                    option.textContent = clusterName;
-                    clusterSelect.appendChild(option);
-                });
-                clusterSelect.disabled = !uniqueClusters.length;
-            }
-
-            function filterCountries(region, cluster) {
-                countrySelect.innerHTML = '<option value="">--Select Country--</option>';
-                const filteredCountries = countries.filter(country =>
-                    (!region || country.region === region) &&
-                    (!cluster || country.cluster === cluster)
-                );
-                filteredCountries.forEach(country => {
-                    const option = document.createElement('option');
-                    option.value = country.country_description;
-                    option.textContent = country.country_description;
-                    countrySelect.appendChild(option);
-                });
-                countrySelect.disabled = !filteredCountries.length;
-            }
-        });
-    </script>
-
 </head>
 <body>
 

@@ -14,6 +14,7 @@ class CountryList(models.Model):
     cluster = models.CharField(max_length=100)
     region = models.CharField(max_length=100)
 
+
 class ProcessValue(models.Model):
     VALUE_CHOICES_STANDARD = [('Yes', 'Yes'), ('No', 'No')]
     VALUE_CHOICES_LOCAL = [('A', 'A'), ('B', 'B'), ('C', 'C'), ('N/A', 'N/A')]
@@ -21,15 +22,18 @@ class ProcessValue(models.Model):
     country = models.ForeignKey(CountryList, on_delete=models.CASCADE)
     value = models.CharField(max_length=100)
 
-    def calculate_harmonization(self, region=None, cluster=None):
-        # Create the base queryset filtered by region and/or cluster
-        base_queryset = ProcessValue.objects.all()
+    @classmethod
+    def calculate_harmonization(cls, region=None, cluster=None, country=None):
+        base_queryset = cls.objects.all()
+
         if region:
             base_queryset = base_queryset.filter(country__region=region)
         if cluster:
             base_queryset = base_queryset.filter(country__cluster=cluster)
+        if country:
+            base_queryset = base_queryset.filter(country__country_description=country)
 
-        total_rows = base_queryset.values('process_taxonomy__task_level6').exclude(value__in=["N/A"]).distinct().count()
+        total_rows = base_queryset.exclude(value="N/A").values('process_taxonomy__task_level6').distinct().count()
 
         if total_rows > 0:
             yes_count = base_queryset.filter(value='Yes').values('process_taxonomy__task_level6').distinct().count()
@@ -39,6 +43,19 @@ class ProcessValue(models.Model):
 
         return percentage
 
+    @classmethod
+    def calculate_harmonization_for_countries(cls, countries):
+        base_queryset = cls.objects.filter(country__in=countries).exclude(value="N/A")
+
+        total_rows = base_queryset.values('process_taxonomy__task_level6').distinct().count()
+
+        if total_rows > 0:
+            yes_count = base_queryset.filter(value='Yes').values('process_taxonomy__task_level6').distinct().count()
+            percentage = round((yes_count / total_rows) * 100, 2)
+        else:
+            percentage = 0
+
+        return percentage
     def process_comp(self, region=None, cluster=None):
         base_queryset = ProcessValue.objects.filter(process_taxonomy__standard_local='Standard')
         if region:

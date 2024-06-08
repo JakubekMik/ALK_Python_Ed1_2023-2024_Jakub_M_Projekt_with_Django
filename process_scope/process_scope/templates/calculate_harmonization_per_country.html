@@ -3,10 +3,8 @@
 {% block title %}Process Level 3 Percentage{% endblock %}
 
 {% block content %}
-
-
 <center>
- <h1>Process Comp Percentage per Country</h1>
+ <h1>Process Harmonization Percentage per Country</h1>
  <h2>Welcome to my first program created using Django !!!</h2>
 </center>
 
@@ -22,29 +20,26 @@
     <label for="cluster">Select a Cluster:</label>
     <select name="cluster" id="cluster" {% if not selected_region %}disabled{% endif %}>
         <option value="">--Select Cluster--</option>
-        {% if selected_region %}
         {% for cluster in clusters %}
         <option value="{{ cluster }}" {% if cluster == selected_cluster %}selected{% endif %}>{{ cluster }}</option>
         {% endfor %}
-        {% endif %}
     </select>
 
     <label for="country">Select a Country to Highlight:</label>
     <select name="country" id="country" {% if not selected_cluster %}disabled{% endif %}>
         <option value="">--Select Country--</option>
-        {% if selected_cluster %}
         {% for country in countries %}
         <option value="{{ country.country_description }}" {% if country.country_description == selected_country %}selected{% endif %}>
             {{ country.country_description }}
         </option>
         {% endfor %}
-        {% endif %}
     </select>
 
     <button type="submit">Submit</button>
 </form>
-
+<center>
 <img src="data:image/png;base64,{{ chart_base64 }}" alt="Process Comp Percentage per Country Chart" />
+</center>
 
 <h2>By Country</h2>
 <table>

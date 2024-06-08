@@ -41,7 +41,7 @@
         }
     </style>
 
-        <script>
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             const regions = JSON.parse('{{ regions|escapejs }}');
             const clusters = JSON.parse('{{ clusters|escapejs }}');
@@ -65,13 +65,14 @@
             function filterClusters(region) {
                 clusterSelect.innerHTML = '<option value="">--Select Cluster--</option>';
                 const filteredClusters = clusters.filter(cluster => cluster.region === region);
-                filteredClusters.forEach(cluster => {
+                const uniqueClusters = [...new Set(filteredClusters.map(cluster => cluster.cluster))];
+                uniqueClusters.forEach(clusterName => {
                     const option = document.createElement('option');
-                    option.value = cluster;
-                    option.textContent = cluster;
+                    option.value = clusterName;
+                    option.textContent = clusterName;
                     clusterSelect.appendChild(option);
                 });
-                clusterSelect.disabled = !filteredClusters.length;
+                clusterSelect.disabled = !uniqueClusters.length;
             }
 
             function filterCountries(region, cluster) {

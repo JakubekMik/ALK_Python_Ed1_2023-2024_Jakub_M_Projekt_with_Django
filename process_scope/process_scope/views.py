@@ -119,10 +119,6 @@ def create_process(request):
         return redirect('proces_page')
 
 
-
-
-
-
 def test(request):
     countries = CountryList.objects.all()
     regions = CountryList.objects.values_list('region', flat=True).distinct()
@@ -137,6 +133,7 @@ def test(request):
         countries = countries.filter(cluster=selected_cluster)
     if selected_country:
         countries = countries.filter(country_description=selected_country)
+
     calculate_harmonization_data = []
     for country in countries:
         process_values = ProcessValue.objects.filter(country=country)
@@ -387,9 +384,6 @@ def calculate_harmonization_per_country_old(request):
 
     return render(request, 'calculate_harmonization_per_country.html', context)
 
-
-
-
 def process_level3_percentage(request):
     countries = CountryList.objects.all()
     regions = CountryList.objects.values_list('region', flat=True).distinct()
@@ -403,7 +397,7 @@ def process_level3_percentage(request):
     process_data = []
     for country in countries:
         percentage = ProcessValue.calculate_process_level3_percentage(
-            region=selected_region, cluster=selected_cluster, country=country.country_description
+            region=None, cluster=None, country=country.country_description
         )
         process_data.append({
             'country': country.country_description,
@@ -425,7 +419,7 @@ def process_level3_percentage(request):
     context = {
         'process_data': process_data,
         'chart_base64': chart_base64,
-        'countries': countries,
+        'countries': list(countries.values('country_description', 'region', 'cluster')),
         'regions': regions,
         'clusters': clusters,
         'selected_country': selected_country,

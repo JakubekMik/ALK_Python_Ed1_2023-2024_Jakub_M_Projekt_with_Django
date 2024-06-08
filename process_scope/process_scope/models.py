@@ -73,6 +73,23 @@ class ProcessValue(models.Model):
 
         return percentage
 
+    @classmethod
+    def calculate_process_level3_percentage(cls, region=None, cluster=None, country=None):
+        base_queryset = cls.objects.all()
+
+        if country:
+            base_queryset = base_queryset.filter(country__country_description=country)
+
+        total_rows = base_queryset.exclude(value="N/A").values('process_taxonomy__task_level6').distinct().count()
+
+        if total_rows > 0:
+            yes_count = base_queryset.filter(value='Yes').values('process_taxonomy__task_level6').distinct().count()
+            percentage = round((yes_count / total_rows) * 100, 2)
+        else:
+            percentage = 0
+
+        return percentage
+
     def save(self, *args, **kwargs):
         if self.process_taxonomy.standard_local == 'Standard':
             if self.value not in dict(self.VALUE_CHOICES_STANDARD).keys():

@@ -51,11 +51,13 @@
 </form>
 
 <center>
-<img src="data:image/png;base64,{{ chart_base64 }}" alt="Process Completion Percentage per Country Chart" />
+    <img id="chartImage" src="data:image/png;base64,{{ chart_base64 }}" alt="Process Completion Percentage per Country Chart" />
+    <br>
+    <button id="downloadChartBtn" onclick="downloadChart()" style="background-color: #00677F; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Download Chart</button>
 </center>
 
 <h2>By Country</h2>
-<table>
+<table id="dataTable">
   <thead>
     <tr>
       <th>Country</th>
@@ -75,6 +77,9 @@
     {% endfor %}
   </tbody>
 </table>
+<center>
+    <button id="downloadTableBtn" onclick="downloadTable()" style="background-color: #00677F; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Download Table</button>
+</center>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -125,6 +130,48 @@
             countrySelect.disabled = !filteredCountries.length;
         }
     });
+
+    function downloadChart() {
+        const button = document.getElementById('downloadChartBtn');
+        button.disabled = true;
+        button.style.backgroundColor = 'grey';
+
+        const link = document.createElement('a');
+        link.href = document.getElementById('chartImage').src;
+        link.download = 'chart.png';
+        link.click();
+
+        setTimeout(() => {
+            button.disabled = false;
+            button.style.backgroundColor = '#00677F';
+        }, 5000);
+    }
+
+    function downloadTable() {
+        const button = document.getElementById('downloadTableBtn');
+        button.disabled = true;
+        button.style.backgroundColor = 'grey';
+
+        const table = document.getElementById('dataTable');
+        let csv = [];
+        for (let row of table.rows) {
+            let cols = [];
+            for (let cell of row.cells) {
+                cols.push(cell.innerText);
+            }
+            csv.push(cols.join(','));
+        }
+        const csvContent = 'data:text/csv;charset=utf-8,' + csv.join('\n');
+        const link = document.createElement('a');
+        link.href = encodeURI(csvContent);
+        link.download = 'data.csv';
+        link.click();
+
+        setTimeout(() => {
+            button.disabled = false;
+            button.style.backgroundColor = '#00677F';
+        }, 5000);
+    }
 </script>
 
 {% endblock %}

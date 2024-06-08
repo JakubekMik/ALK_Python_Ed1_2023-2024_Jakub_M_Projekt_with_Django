@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 
-{% block title %}Process Harmonization Percentage{% endblock %}
+{% block title %}Process Level 3 Percentage{% endblock %}
 
 {% block content %}
+
 <center>
- <h1>Process Harmonization Percentage per Country</h1>
- <h2>Welcome to my program created using Django!</h2>
+    <h1>Process Completion Percentage per Country</h1>
 </center>
 
-<form method="get" action="{% url 'calculate_harmonization_per_country' %}">
+<form method="get" action="{% url 'process_level3_percentage' %}">
     <label for="region">Select a Region:</label>
     <select name="region" id="region">
         <option value="">--Select Region--</option>
@@ -20,48 +20,66 @@
     <label for="cluster">Select a Cluster:</label>
     <select name="cluster" id="cluster" {% if not selected_region %}disabled{% endif %}>
         <option value="">--Select Cluster--</option>
+        {% if selected_region %}
         {% for cluster in clusters %}
         <option value="{{ cluster }}" {% if cluster == selected_cluster %}selected{% endif %}>{{ cluster }}</option>
         {% endfor %}
+        {% else %}
+        {% for cluster in clusters %}
+        <option value="{{ cluster }}">{{ cluster }}</option>
+        {% endfor %}
+        {% endif %}
     </select>
 
     <label for="country">Select a Country to Highlight:</label>
     <select name="country" id="country" {% if not selected_cluster %}disabled{% endif %}>
         <option value="">--Select Country--</option>
+        {% if selected_cluster %}
         {% for country in countries %}
         <option value="{{ country.country_description }}" {% if country.country_description == selected_country %}selected{% endif %}>
             {{ country.country_description }}
         </option>
         {% endfor %}
+        {% else %}
+        {% for country in countries %}
+        <option value="{{ country.country_description }}">{{ country.country_description }}</option>
+        {% endfor %}
+        {% endif %}
     </select>
 
     <button type="submit">Submit</button>
 </form>
+
 <center>
-<img src="data:image/png;base64,{{ chart_base64 }}" alt="Harmonization Percentage per Country Chart" />
+    <img id="chartImage" src="data:image/png;base64,{{ chart_base64 }}" alt="Process Completion Percentage per Country Chart" />
+    <br>
+    <button id="downloadChartBtn" onclick="downloadChart()" style="background-color: #00677F; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Download Chart</button>
 </center>
 
 <h2>By Country</h2>
-<table>
+<table id="dataTable">
   <thead>
     <tr>
       <th>Country</th>
       <th>Region</th>
       <th>Cluster</th>
-      <th>Harmonization Percentage</th>
+      <th>Process Level 3 Percentage</th>
     </tr>
   </thead>
   <tbody>
-    {% for data in calculate_harmonization_data %}
+    {% for data in process_data %}
     <tr>
       <td>{{ data.country }}</td>
       <td>{{ data.region }}</td>
       <td>{{ data.cluster }}</td>
-      <td>{{ data.calculate_harmonization_percentage }}%</td>
+      <td>{{ data.percentage }}%</td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
+<center>
+    <button id="downloadTableBtn" onclick="downloadTable()" style="background-color: #00677F; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Download Table</button>
+</center>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -112,6 +130,48 @@
             countrySelect.disabled = !filteredCountries.length;
         }
     });
+
+    function downloadChart() {
+        const button = document.getElementById('downloadChartBtn');
+        button.disabled = true;
+        button.style.backgroundColor = 'grey';
+
+        const link = document.createElement('a');
+        link.href = document.getElementById('chartImage').src;
+        link.download = 'chart.png';
+        link.click();
+
+        setTimeout(() => {
+            button.disabled = false;
+            button.style.backgroundColor = '#00677F';
+        }, 5000);
+    }
+
+    function downloadTable() {
+        const button = document.getElementById('downloadTableBtn');
+        button.disabled = true;
+        button.style.backgroundColor = 'grey';
+
+        const table = document.getElementById('dataTable');
+        let csv = [];
+        for (let row of table.rows) {
+            let cols = [];
+            for (let cell of row.cells) {
+                cols.push(cell.innerText);
+            }
+            csv.push(cols.join(','));
+        }
+        const csvContent = 'data:text/csv;charset=utf-8,' + csv.join('\n');
+        const link = document.createElement('a');
+        link.href = encodeURI(csvContent);
+        link.download = 'data.csv';
+        link.click();
+
+        setTimeout(() => {
+            button.disabled = false;
+            button.style.backgroundColor = '#00677F';
+        }, 5000);
+    }
 </script>
 
 {% endblock %}

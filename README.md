@@ -56,14 +56,15 @@ The program presents the analysis results graphically, making them easier to und
 
 To run the Django project, follow these steps:
 
-- ** Clone the repository:**
+- **Clone the repository:**
 
 ```python
 git clone https://github.com/JakubekMik/your-django-repo.git
 cd your-django-repo
 ```
 
-- ** Install the required Python packages:**
+- **Install the required Python packages:**
+
 ```python
 pip install -r requirements.txt
 ```
@@ -72,12 +73,12 @@ pip install -r requirements.txt
 ```python
 python manage.py migrate
 ```
-- ** Create a superuser:**
+- **Create a superuser:**
 
 ```python
 python manage.py createsuperuser
 ```
-- ** Run the development server:**
+- **Run the development server:**
 
 ```python
 python manage.py runserver
@@ -90,11 +91,11 @@ Open your web browser and navigate to http://127.0.0.1:8000/.
 
 In future versions of the Process Harmonization Program, we aim to include the following features:
 
-- ** Enhanced Search Functionality:** 
+- **Enhanced Search Functionality:** 
 
 Implement a robust search feature that allows users to quickly and easily find specific process or country values. This will improve the usability and efficiency of the program, especially when dealing with large datasets.
 
-- ** Logging Functionality:** 
+- **Logging Functionality:** 
 
 Add the ability for users to log in to the system to update and add values. This feature will enhance the security and integrity of the data by ensuring that only authorized users can make changes.
 

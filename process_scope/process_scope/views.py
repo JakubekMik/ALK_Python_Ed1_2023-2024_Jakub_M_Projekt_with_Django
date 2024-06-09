@@ -118,7 +118,7 @@ def create_process(request):
             activity_level5=activity_level5, task_level6=task_level6, standard_local=standard_local)
         return redirect('proces_page')
 
-def bar_chart_with_colors(x, y, selected_country=None, selected_cluster=None, selected_region=None):
+def bar_chart_with_colors(x, y, selected_country=None, selected_cluster=None, selected_region=None, title='Chart Title'):
     plt.figure(figsize=(10, 6))
     colors = ["#05647e"] * len(x)
 
@@ -135,7 +135,7 @@ def bar_chart_with_colors(x, y, selected_country=None, selected_cluster=None, se
     plt.bar(x, y, color=colors)
     plt.xlabel('Country')
     plt.ylabel('Process Level 3 Percentage')
-    plt.title('Process Completion Percentage per Country')
+    plt.title(title)
     plt.xticks(rotation=45, ha="right")
     plt.tight_layout()
 
@@ -148,6 +148,8 @@ def bar_chart_with_colors(x, y, selected_country=None, selected_cluster=None, se
 
     image_base64 = base64.b64encode(image_png).decode('utf-8')
     return image_base64
+
+
 
 def process_comp_per_country(request):
     countries = CountryList.objects.all()
@@ -213,7 +215,8 @@ def calculate_harmonization_per_country(request):
         x, y,
         selected_country=selected_country,
         selected_cluster=selected_cluster,
-        selected_region=selected_region
+        selected_region=selected_region,
+        title='Harmonization Percentage per Country'
     )
 
     context = {
@@ -254,7 +257,8 @@ def process_level3_percentage(request):
         x, y,
         selected_country=selected_country,
         selected_cluster=selected_cluster,
-        selected_region=selected_region
+        selected_region=selected_region,
+        title='Process Completion Percentage per Country'
     )
 
     context = {

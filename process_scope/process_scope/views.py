@@ -118,66 +118,6 @@ def create_process(request):
             activity_level5=activity_level5, task_level6=task_level6, standard_local=standard_local)
         return redirect('proces_page')
 
-
-def test(request):
-    countries = CountryList.objects.all()
-    regions = CountryList.objects.values_list('region', flat=True).distinct()
-    clusters = CountryList.objects.values_list('cluster', flat=True).distinct()
-    selected_region = request.GET.get('region')
-    selected_cluster = request.GET.get('cluster')
-    selected_country = request.GET.get('country')
-    # Filter countries based on selected filters
-    if selected_region:
-        countries = countries.filter(region=selected_region)
-    if selected_cluster:
-        countries = countries.filter(cluster=selected_cluster)
-    if selected_country:
-        countries = countries.filter(country_description=selected_country)
-
-    calculate_harmonization_data = []
-    for country in countries:
-        process_values = ProcessValue.objects.filter(country=country)
-        if process_values.exists():
-            calculate_harmonization_percentage = process_values.first().calculate_harmonization()
-            calculate_harmonization_data.append({
-                'country': country.country_description,
-                'calculate_harmonization_percentage': calculate_harmonization_percentage
-            })
-    context = {
-        'calculate_harmonization_data': calculate_harmonization_data,
-        'countries': countries,
-        'regions': regions,
-        'clusters': clusters,
-        'selected_country': selected_country,
-        'selected_region': selected_region,
-        'selected_cluster': selected_cluster
-    }
-    return render(request, 'calculate_harmonization_per_country.html', context)
-
-def bar_chart_with_colors_old(x, y, TextX=None, TextY=None, Title=None, highlight_index=None):
-    # Ensure x is a list of strings and y is a list of floats
-    x = [str(i) for i in x]
-    y = [float(i) for i in y]
-    plt.figure(figsize=(10, 6))
-    colors = ["#05647e"] * len(x)
-    if highlight_index is not None:
-        colors[highlight_index] = "#ff5733"
-    plt.bar(x, y, color=colors)
-    plt.xlabel(TextX)
-    plt.ylabel(TextY)
-    plt.title(Title)
-    plt.xticks(rotation=45, ha="right")
-    plt.tight_layout()
-    buffer = io.BytesIO()
-    plt.savefig(buffer, format='png')
-    buffer.seek(0)
-    plt.close()
-    image_png = buffer.getvalue()
-    buffer.close()
-    image_base64 = base64.b64encode(image_png).decode('utf-8')
-    return image_base64
-
-
 def bar_chart_with_colors(x, y, selected_country=None, selected_cluster=None, selected_region=None):
     plt.figure(figsize=(10, 6))
     colors = ["#05647e"] * len(x)
@@ -257,15 +197,6 @@ def calculate_harmonization_per_country(request):
     selected_region = request.GET.get('region')
     selected_cluster = request.GET.get('cluster')
 
-    # Filter countries based on selected filters
-    if selected_region:
-        countries = countries.filter(region=selected_region)
-    if selected_cluster:
-        countries = countries.filter(cluster=selected_cluster)
-    if selected_country:
-        countries = countries.filter(country_description=selected_country)
-
-    # Calculate harmonization percentage for countries
     calculate_harmonization_data = []
     for country in countries:
         harmonization_percentage = ProcessValue.calculate_harmonization(country=country.country_description)
@@ -276,14 +207,6 @@ def calculate_harmonization_per_country(request):
             'calculate_harmonization_percentage': harmonization_percentage
         })
 
-    highlight_index = None
-    if selected_country:
-        for idx, data in enumerate(calculate_harmonization_data):
-            if data['country'] == selected_country:
-                highlight_index = idx
-                break
-
-    # Generate the bar chart
     x = [data['country'] for data in calculate_harmonization_data]
     y = [data['calculate_harmonization_percentage'] for data in calculate_harmonization_data]
     chart_base64 = bar_chart_with_colors(
@@ -305,85 +228,6 @@ def calculate_harmonization_per_country(request):
     }
 
     return render(request, 'calculate_harmonization_per_country.html', context)
-
-def calculate_harmonization_per_country_old(request):
-    calculate_harmonization_data = []
-    countries = CountryList.objects.all()
-    regions = CountryList.objects.values_list('region', flat=True).distinct()
-    clusters = CountryList.objects.values_list('cluster', flat=True).distinct()
-
-    selected_country = request.GET.get('country')
-    selected_region = request.GET.get('region')
-    selected_cluster = request.GET.get('cluster')
-
-    # Filter countries based on selected filters
-    if selected_region:
-        countries = countries.filter(region=selected_region)
-    if selected_cluster:
-        countries = countries.filter(cluster=selected_cluster)
-    if selected_country:
-        countries = countries.filter(country_description=selected_country)
-
-    # Calculate harmonization percentage for regions
-    region_results = []
-    for region in regions:
-        if region:
-            region_countries = CountryList.objects.filter(region=region)
-            region_percentage = ProcessValue.calculate_harmonization_for_countries(region_countries)
-            region_results.append({'region': region, 'percentage': region_percentage})
-
-    # Calculate harmonization percentage for clusters
-    cluster_results = []
-    for cluster in clusters:
-        if cluster:
-            cluster_countries = CountryList.objects.filter(cluster=cluster)
-            cluster_percentage = ProcessValue.calculate_harmonization_for_countries(cluster_countries)
-            region = CountryList.objects.filter(cluster=cluster).values_list('region', flat=True).distinct().first()
-            cluster_results.append({'cluster': cluster, 'region': region, 'percentage': cluster_percentage})
-
-    # Calculate harmonization percentage for countries
-    for country in countries:
-        harmonization_percentage = ProcessValue.calculate_harmonization(country=country.country_description)
-        calculate_harmonization_data.append({
-            'country': country.country_description,
-            'region': country.region,
-            'cluster': country.cluster,
-            'calculate_harmonization_percentage': harmonization_percentage
-        })
-
-    highlight_index = None
-    if selected_country:
-        for idx, data in enumerate(calculate_harmonization_data):
-            if data['country'] == selected_country:
-                highlight_index = idx
-                break
-
-    # Generate the bar chart
-    x = [data['country'] for data in calculate_harmonization_data]
-    y = [data['calculate_harmonization_percentage'] for data in calculate_harmonization_data]
-    chart_base64 = bar_chart_with_colors(
-        x, y,
-        TextX='Country',
-        TextY='Harmonization Percentage',
-        Title='Harmonization Percentage per Country',
-        highlight_index=highlight_index
-    )
-
-    context = {
-        'calculate_harmonization_data': calculate_harmonization_data,
-        'chart_base64': chart_base64,
-        'countries': countries,
-        'regions': regions,
-        'clusters': clusters,
-        'selected_country': selected_country,
-        'selected_region': selected_region,
-        'selected_cluster': selected_cluster,
-        'region_results': region_results,
-        'cluster_results': cluster_results
-    }
-
-    return render(request, 'calculate_harmonization_per_country.html', context)
-
 def process_level3_percentage(request):
     countries = CountryList.objects.all()
     regions = CountryList.objects.values_list('region', flat=True).distinct()
@@ -392,8 +236,6 @@ def process_level3_percentage(request):
     selected_region = request.GET.get('region')
     selected_cluster = request.GET.get('cluster')
     selected_country = request.GET.get('country')
-
-    # Calculate process level 3 percentage for all countries
     process_data = []
     for country in countries:
         percentage = ProcessValue.calculate_process_level3_percentage(
@@ -406,7 +248,6 @@ def process_level3_percentage(request):
             'percentage': percentage
         })
 
-    # Generate the bar chart with colors
     x = [data['country'] for data in process_data]
     y = [data['percentage'] for data in process_data]
     chart_base64 = bar_chart_with_colors(

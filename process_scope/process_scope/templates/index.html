@@ -1,48 +1,33 @@
 {% extends 'base.html' %}
 
-{% block title %}Process Level 3 Percentage{% endblock %}
+{% block title %}Introduction to Process Harmonization Program{% endblock %}
 
 {% block content %}
 
-
 <center>
- <h1>Introduction to Process Harmonization Program</h1>
-
-    <h2>Welcome to my first program created using Django !!! </h2>
+    <h1>Introduction to Process Harmonization Program</h1>
+    <h2>Welcome to my program created using Django!</h2>
 </center>
-    <p>The Process Harmonization Program is a data analysis tool that enables the processing and analysis of information related to business processes. Below you will find a description of the tasks performed by this program:</p>
 
-    <h3>Column Separation:</h3>
-    <p>The program automatically separates the column containing country names when there is more than one country name (separated by a comma or other delimiter). This operation facilitates the analysis of data related to multiple countries.</p>
+<p>The Process Harmonization Program is a data analysis tool that enables the processing and analysis of information related to business processes. Below you will find a description of the tasks performed by this program:</p>
 
-    <h3>Data Conversion from Pivot to Database:</h3>
-    <p>The program allows the conversion of data provided in pivot form to database form. It reverses this process, allowing for better analysis and storage of data in a more traditional database form.</p>
+<h3>Illustration of Major Factors:</h3>
+<p>This program illustrates two major factors:</p>
+<ul>
+    <li><strong>Process Centralization (Process Scope)</strong>: This factor illustrates the transition of processes from local operations to a central hub. It indicates whether specific business processes have been moved to a central location for standardized execution.</li>
+    <li><strong>Process Harmonization</strong>: This factor demonstrates if the processes performed at the central hub follow a standard procedure. It also highlights any extra tasks or tasks that have not been transitioned to the central hub.</li>
+</ul>
 
-    <h3>Assignment of Data to Corresponding Geographic Regions:</h3>
-    <p>Data is assigned to the appropriate geographic regions, enabling data analysis from a geographical perspective. This facilitates understanding of where specific business phenomena occur.</p>
 
-    <h3>Calculation of Process Scope Completion:</h3>
-    <p>The program calculates whether for a given process level (level 4) there is a task performed at level 6 (value "Yes"). The process is considered adopted if such a task exists. Otherwise, if such a task is missing, the process is considered unadopted, with the possibility of "Local Exception" being skipped.</p>
+<h3>Calculation of Process Scope Completion:</h3>
+<p>The program calculates whether for a given process level (level 4) there is a task performed at level 6 (value "Yes"). The process is considered adopted if such a task exists. Otherwise, if such a task is missing, the process is considered unadopted, with the possibility of "Local Exception" being skipped.</p>
 
-    <h3>Calculation of Process Harmonization:</h3>
-    <p>The program calculates the process harmonization index, which is the ratio of the number of Standard Tasks performed (value Yes) to the total number of Standard Tasks in the process, taking into account any Local Exceptions. This index helps understand the degree of standardization and consistency in the processes being performed.</p>
+<h3>Calculation of Process Harmonization:</h3>
+<p>The program calculates the process harmonization index, which is the ratio of the number of Standard Tasks performed (value Yes) to the total number of Standard Tasks in the process, taking into account any Local Exceptions. This index helps understand the degree of standardization and consistency in the processes being performed.</p>
 
-    <h3>Graphical Presentation of Results:</h3>
-    <p>The program presents the analysis results graphically, making them easier to understand and interpret. Users have the option to limit the results to a specific region or process, enabling a more detailed analysis.</p>
+<h2>Requirements</h2>
+<p>To run the program, make sure you have the required Python packages installed. You can install them using the following command:</p>
 
-    <h3>Graphical ilustation of program</h3>
-    <img src="https://github.com/JakubekMik/ALK_Python_Ed1_2023-2024_Jakub_M_Projekt/blob/main/picture/jakub_alk_main.jpg" alt="Prezentacja">
-
-    <h3>Graphical ilustation of program</h3>
-    <img src="https://github.com/JakubekMik/ALK_Python_Ed1_2023-2024_Jakub_M_Projekt/blob/main/picture/jakub_alk_psc.jpg" alt="Prezentacja">
-
-    <h2>Running Instructions</h2>
-
-    <pre><code>streamlit run ".\program.py"</code></pre>
-
-    <h2>Requirements</h2>
-    <p>To run the program, make sure you have the required Python packages installed. You can install them using the following command:</p>
-
-    <pre><code>pip install -r requirements.txt</code></pre>
+<pre><code>pip install -r requirements.txt</code></pre>
 
 {% endblock %}

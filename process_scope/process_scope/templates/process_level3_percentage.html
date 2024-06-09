@@ -8,62 +8,73 @@
     <h1>Process Completion Percentage per Country</h1>
 </center>
 
-<form method="get" action="{% url 'process_level3_percentage' %}">
-    <label for="region">Select a Region:</label>
-    <select name="region" id="region">
-        <option value="">--Select Region--</option>
-        {% for region in regions %}
-        <option value="{{ region }}" {% if region == selected_region %}selected{% endif %}>{{ region }}</option>
-        {% endfor %}
-    </select>
+<div class="content-container">
+    <div class="filter-container">
+        <h3>Select to highlight</h3>
+        <form method="get" action="{% url 'process_level3_percentage' %}">
+            <div class="form-group">
+                <label for="region">Select a Region:</label>
+                <select name="region" id="region">
+                    <option value="">--Select Region--</option>
+                    {% for region in regions %}
+                    <option value="{{ region }}" {% if region == selected_region %}selected{% endif %}>{{ region }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
-    <label for="cluster">Select a Cluster:</label>
-    <select name="cluster" id="cluster" {% if not selected_region %}disabled{% endif %}>
-        <option value="">--Select Cluster--</option>
-        {% if selected_region %}
-        {% for cluster in clusters %}
-        <option value="{{ cluster }}" {% if cluster == selected_cluster %}selected{% endif %}>{{ cluster }}</option>
-        {% endfor %}
-        {% else %}
-        {% for cluster in clusters %}
-        <option value="{{ cluster }}">{{ cluster }}</option>
-        {% endfor %}
-        {% endif %}
-    </select>
+            <div class="form-group">
+                <label for="cluster">Select a Cluster:</label>
+                <select name="cluster" id="cluster" {% if not selected_region %}disabled{% endif %}>
+                    <option value="">--Select Cluster--</option>
+                    {% if selected_region %}
+                    {% for cluster in clusters %}
+                    <option value="{{ cluster }}" {% if cluster == selected_cluster %}selected{% endif %}>{{ cluster }}</option>
+                    {% endfor %}
+                    {% else %}
+                    {% for cluster in clusters %}
+                    <option value="{{ cluster }}">{{ cluster }}</option>
+                    {% endfor %}
+                    {% endif %}
+                </select>
+            </div>
 
-    <label for="country">Select a Country to Highlight:</label>
-    <select name="country" id="country" {% if not selected_cluster %}disabled{% endif %}>
-        <option value="">--Select Country--</option>
-        {% if selected_cluster %}
-        {% for country in countries %}
-        <option value="{{ country.country_description }}" {% if country.country_description == selected_country %}selected{% endif %}>
-            {{ country.country_description }}
-        </option>
-        {% endfor %}
-        {% else %}
-        {% for country in countries %}
-        <option value="{{ country.country_description }}">{{ country.country_description }}</option>
-        {% endfor %}
-        {% endif %}
-    </select>
+            <div class="form-group">
+                <label for="country">Select a Country to Highlight:</label>
+                <select name="country" id="country" {% if not selected_cluster %}disabled{% endif %}>
+                    <option value="">--Select Country--</option>
+                    {% if selected_cluster %}
+                    {% for country in countries %}
+                    <option value="{{ country.country_description }}" {% if country.country_description == selected_country %}selected{% endif %}>
+                        {{ country.country_description }}
+                    </option>
+                    {% endfor %}
+                    {% else %}
+                    {% for country in countries %}
+                    <option value="{{ country.country_description }}">{{ country.country_description }}</option>
+                    {% endfor %}
+                    {% endif %}
+                </select>
+            </div>
 
-    <button type="submit">Submit</button>
-</form>
+            <button type="submit" style="background-color: #00677F; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Submit</button>
+        </form>
+    </div>
 
-<center>
-    <img id="chartImage" src="data:image/png;base64,{{ chart_base64 }}" alt="Process Completion Percentage per Country Chart" />
-    <br>
-    <button id="downloadChartBtn" onclick="downloadChart()" style="background-color: #00677F; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Download Chart</button>
-</center>
+    <div class="chart-container">
+        <img id="chartImage" src="data:image/png;base64,{{ chart_base64 }}" alt="Process Completion Percentage per Country Chart" />
+        <br>
+        <button id="downloadChartBtn" onclick="downloadChart()" style="background-color: #00677F; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Download Chart</button>
+    </div>
+</div>
 
 <h2>By Country</h2>
 <table id="dataTable">
   <thead>
     <tr>
-      <th>Country</th>
-      <th>Region</th>
-      <th>Cluster</th>
-      <th>Process Level 3 Percentage</th>
+      <th onclick="sortTable(0)">Country</th>
+      <th onclick="sortTable(1)">Region</th>
+      <th onclick="sortTable(2)">Cluster</th>
+      <th onclick="sortTable(3)">Process Level 3 Percentage</th>
     </tr>
   </thead>
   <tbody>
@@ -131,6 +142,29 @@
         }
     });
 
+    function sortTable(columnIndex) {
+        const table = document.getElementById('dataTable');
+        const tbody = table.tBodies[0];
+        const rows = Array.from(tbody.rows);
+        const isAscending = table.querySelectorAll('th')[columnIndex].classList.contains('asc');
+
+        rows.sort((rowA, rowB) => {
+            const cellA = rowA.cells[columnIndex].textContent.trim().toLowerCase();
+            const cellB = rowB.cells[columnIndex].textContent.trim().toLowerCase();
+
+            if (cellA < cellB) return isAscending ? 1 : -1;
+            if (cellA > cellB) return isAscending ? -1 : 1;
+            return 0;
+        });
+
+        rows.forEach(row => tbody.appendChild(row));
+
+        // Toggle sorting order class
+        table.querySelectorAll('th').forEach(th => th.classList.remove('asc', 'desc'));
+        table.querySelectorAll('th')[columnIndex].classList.toggle('asc', !isAscending);
+        table.querySelectorAll('th')[columnIndex].classList.toggle('desc', isAscending);
+    }
+
     function downloadChart() {
         const button = document.getElementById('downloadChartBtn');
         button.disabled = true;
@@ -173,5 +207,60 @@
         }, 5000);
     }
 </script>
+
+<style>
+th {
+    cursor: pointer;
+}
+th.asc::after {
+    content: ' \25B2'; /* Unicode character for upward arrow */
+}
+th.desc::after {
+    content: ' \25BC'; /* Unicode character for downward arrow */
+}
+.content-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: 20px 0;
+}
+.filter-container {
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 5px;
+    width: 30%; /* Adjusted width */
+}
+.filter-container h3 {
+    margin-bottom: 15px;
+}
+.filter-container .form-group {
+    text-align: left;
+}
+.filter-container label {
+    display: block;
+    margin: 10px 0 5px;
+}
+.filter-container select, .filter-container button {
+    display: block;
+    width: 100%;
+    max-width: 100%; /* Adjusted max-width */
+    margin: 5px 0 15px; /* Adjusted margins */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.filter-container button {
+    background-color: #00677F;
+    color: white;
+    cursor: pointer;
+}
+.filter-container button:hover {
+    background-color: #004f5f;
+}
+.chart-container {
+    width: 65%; /* Adjusted width */
+    text-align: center;
+}
+</style>
 
 {% endblock %}

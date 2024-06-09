@@ -6,12 +6,12 @@
 <center>
 <h2>Region Data</h2>
 </center>
-<table>
+<table id="regionTable">
   <thead>
     <tr>
-      <th>Region</th>
-      <th>Cluster</th>
-      <th>Country</th>
+      <th onclick="sortTable(0)">Region</th>
+      <th onclick="sortTable(1)">Cluster</th>
+      <th onclick="sortTable(2)">Country</th>
       <th>Action</th>
     </tr>
   </thead>
@@ -32,5 +32,42 @@
 <div style="text-align: center; margin-top: 20px;">
   <a href="{% url 'add_region' %}" style="background-color: #00677F; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Add New Record</a>
 </div>
+
+<script>
+function sortTable(columnIndex) {
+    const table = document.getElementById('regionTable');
+    const tbody = table.tBodies[0];
+    const rows = Array.from(tbody.rows);
+    const isAscending = table.querySelectorAll('th')[columnIndex].classList.contains('asc');
+
+    rows.sort((rowA, rowB) => {
+        const cellA = rowA.cells[columnIndex].textContent.trim().toLowerCase();
+        const cellB = rowB.cells[columnIndex].textContent.trim().toLowerCase();
+
+        if (cellA < cellB) return isAscending ? 1 : -1;
+        if (cellA > cellB) return isAscending ? -1 : 1;
+        return 0;
+    });
+
+    rows.forEach(row => tbody.appendChild(row));
+
+    // Toggle sorting order class
+    table.querySelectorAll('th').forEach(th => th.classList.remove('asc', 'desc'));
+    table.querySelectorAll('th')[columnIndex].classList.toggle('asc', !isAscending);
+    table.querySelectorAll('th')[columnIndex].classList.toggle('desc', isAscending);
+}
+</script>
+
+<style>
+th {
+    cursor: pointer;
+}
+th.asc::after {
+    content: ' \25B2'; /* Unicode character for upward arrow */
+}
+th.desc::after {
+    content: ' \25BC'; /* Unicode character for downward arrow */
+}
+</style>
 
 {% endblock %}

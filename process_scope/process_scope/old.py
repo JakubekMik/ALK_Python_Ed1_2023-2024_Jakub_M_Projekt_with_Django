@@ -1,3 +1,4 @@
+#taken from views.py
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import ProcessTaxonomy,ProcessValue,CountryList

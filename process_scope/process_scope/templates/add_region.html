@@ -8,14 +8,21 @@
 
 <form method="POST" action="{% url 'create_region' %}">
     {% csrf_token %}
-    <label for="region">Region:</label>
-    <input type="text" name="region" id="region">
-    <label for="cluster">Cluster:</label>
-    <input type="text" name="cluster" id="cluster">
-    <label for="country">Country:</label>
-    <input type="text" name="country" id="country">
-    <button type="submit">Submit</button>
-    <a href="{% url 'region_page' %}">Cancel</a>
+     <div style="margin-bottom: 15px;">
+    <label for="region" style="display: block; margin-bottom: 5px;">Region:</label>
+    <input type="text" name="region" id="region" style="width: 80%; padding: 8px;">
+     </div>
+     <div style="margin-bottom: 15px;">
+    <label for="cluster" style="display: block; margin-bottom: 5px;">Cluster:</label>
+    <input type="text" name="cluster" id="cluster" style="width: 80%; padding: 8px;">
+     </div>
+    <label for="country" style="display: block; margin-bottom: 5px;">Country:</label>
+    <input type="text" name="country" id="country" style="width: 80%; padding: 8px;">
+
+    <div style="text-align: center; margin-top: 20px;">
+        <button type="submit" style="background-color: #00677F; color: white; padding: 10px 20px; border: none; border-radius: 10px;">Submit</button>
+        <a href="{% url 'region_page' %}" style="background-color: red; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-left: 10px;">Cancel</a>
+    </div>
 </form>
 
 {% endblock %}
